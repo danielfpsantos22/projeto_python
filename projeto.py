@@ -85,7 +85,6 @@ def salvar_dados():
 
 # =============================================================================
 # Funções de Validação e Utilitárias
-# (Mantidas do original com docstrings)
 # =============================================================================
 
 def validar_opcao_lista(opcao, lista):
@@ -109,7 +108,7 @@ def validar_entrada_numerica(mensagem, minimo=None, maximo=None):
                 print(f"Erro: O número deve ser maior ou igual a {minimo}")
                 continue
                 
-            # Verifica o máximo (exclusivo, como no original)
+            # Verifica o máximo (exclusivo)
             if maximo is not None and numero >= maximo:
                 print(f"Erro: O índice deve ser menor que {maximo}")
                 continue
@@ -127,8 +126,7 @@ def obter_proximo_id():
     return id_atual
 
 # =============================================================================
-# Funções do Sistema
-# (Mantidas do original com pequenas correções de lógica e remoção de prints de debug)
+# Funções do Sistema de Gerenciamento de Tarefas
 # =============================================================================
 
 def criar_tarefa():
@@ -252,13 +250,13 @@ def concluir_tarefa():
         print("Nenhuma tarefa cadastrada!")
         return
     
-    # Encontra tarefa em andamento (Prioriza a que está em Fazendo)
+    # Encontra tarefa em andamento (Prioriza a que está sendo Feito)
     tarefa_em_andamento = next((t for t in lista_tarefas if t["status"] == "Fazendo"), None)
     
     if tarefa_em_andamento:
         print(f"\nTarefa em andamento selecionada: '{tarefa_em_andamento['titulo']}' (ID: {tarefa_em_andamento['id']})")
     else:
-        # Permite escolher uma pendente se não houver em andamento
+        # Prioriza uma tarefa pendente se não houver em andamento
         tarefas_pendentes = [t for t in lista_tarefas if t["status"] == "Pendente"]
         
         if not tarefas_pendentes:
@@ -366,8 +364,6 @@ def excluir_concluidas_antigas():
     def tarefa_antiga(t):
         data = t.get("data_conclusao")
         # Se não tiver data_conclusao, não a considera para exclusão por antiguidade, a menos que se defina
-        # uma política diferente (a implementação original parecia considerá-la antiga se não tinha data)
-        # Por segurança, só removemos se for um objeto datetime e for anterior ao corte.
         if not isinstance(data, datetime):
             return False
         return data < corte
